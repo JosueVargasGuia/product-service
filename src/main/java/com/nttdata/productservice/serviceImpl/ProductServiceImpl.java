@@ -1,6 +1,5 @@
 package com.nttdata.productservice.serviceImpl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +26,23 @@ import reactor.core.publisher.Mono;
 @Service
 public class ProductServiceImpl implements ProductService {
 	Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
+
 	@Autowired
 	ProductRepository productRepository;
+
+/*
+	@Autowired
+	RestTemplate restTemplate;
+
+	@Value("${api.uri.tableId-service}")
+	private String tableIdService;
+  */
+
 	@Autowired
 	RestTemplate restTemplate;
 	@Value("${api.uri.tableId-service}")
 	String tableIdService;
+
 
 	@Override
 	public Flux<Product> findAll() {
