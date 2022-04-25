@@ -24,4 +24,6 @@ public class Product {
 		return "Product [idProducto=" + idProducto + ", productId=" + productId + ", descriptionProducto="
 				+ descriptionProducto + ", typeProduct=" + typeProduct + ", idConfiguration=" + idConfiguration + "]";
 	}
+	
+	//comentario
 }
