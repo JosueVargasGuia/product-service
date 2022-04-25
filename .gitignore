@@ -1,0 +1,11 @@
+*.class
+/target/*
+/src/target*
+/.settings/*
+/.classpath
+.factorypath
+.project
+.gitignore.bak
+.gitignore.bak
+mvnw
+mvnw.cmd
