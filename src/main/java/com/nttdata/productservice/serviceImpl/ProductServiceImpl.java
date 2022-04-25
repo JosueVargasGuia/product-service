@@ -30,11 +30,19 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	ProductRepository productRepository;
 
+/*
 	@Autowired
 	RestTemplate restTemplate;
 
 	@Value("${api.uri.tableId-service}")
 	private String tableIdService;
+  */
+
+	@Autowired
+	RestTemplate restTemplate;
+	@Value("${api.uri.tableId-service}")
+	String tableIdService;
+
 
 	@Override
 	public Flux<Product> findAll() {
