@@ -7,13 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+ 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
+import org.springframework.web.client.RestTemplate; 
+import com.nttdata.productservice.FeignClient.TableIdFeignClient;
 import com.nttdata.productservice.entity.Product;
 import com.nttdata.productservice.entity.ProductId;
 import com.nttdata.productservice.entity.TypeProduct;
@@ -29,7 +26,8 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	ProductRepository productRepository;
-
+@Autowired
+TableIdFeignClient tableIdFeignClient;
 /*
 	@Autowired
 	RestTemplate restTemplate;
@@ -40,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	RestTemplate restTemplate;
-	@Value("${api.uri.tableId-service}")
+	@Value("${api.tableId-service.uri}")
 	String tableIdService;
 
 
@@ -63,6 +61,8 @@ public class ProductServiceImpl implements ProductService {
 		if (key >= 1) {
 			product.setIdProducto(key);
 			log.info("SAVE[product]:" + product.toString());
+		}else {
+			return Mono.error(new InterruptedException("Servicio no disponible:" + Product.class.getSimpleName()));		
 		}
 		return productRepository.insert(product);
 	}
@@ -122,7 +122,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Long generateKey(String nameTable) {
 		log.info(tableIdService + "/generateKey/" + nameTable);
-		ResponseEntity<Long> responseGet = restTemplate.exchange(tableIdService + "/generateKey/" + nameTable,
+		/*ResponseEntity<Long> responseGet = restTemplate.exchange(tableIdService + "/generateKey/" + nameTable,
 				HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
 				});
 		if (responseGet.getStatusCode() == HttpStatus.OK) {
@@ -130,6 +130,7 @@ public class ProductServiceImpl implements ProductService {
 			return responseGet.getBody();
 		} else {
 			return Long.valueOf(0);
-		}
+		}*/
+		return tableIdFeignClient.generateKey(nameTable);
 	}
 }
