@@ -46,8 +46,8 @@ public class ProductController {
 			return Mono.just(ResponseEntity.badRequest().build());
 		});
 	}
-
-	@GetMapping(value="/{idProducto}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+// consumes = MediaType.APPLICATION_JSON_VALUE ,
+	@GetMapping(value="/{idProducto}",produces = MediaType.APPLICATION_JSON_VALUE)
 	public Mono<ResponseEntity<Product>> findById(@PathVariable(name = "idProducto") long idProducto) {
 		return productService.findById(idProducto).map(product -> ResponseEntity.ok().body(product))
 				.onErrorResume(e -> {
