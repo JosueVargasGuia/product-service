@@ -1,15 +1,16 @@
 package com.nttdata.productservice.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
- 
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate; 
+import org.springframework.web.client.RestTemplate;
 import com.nttdata.productservice.FeignClient.TableIdFeignClient;
 import com.nttdata.productservice.entity.Product;
 import com.nttdata.productservice.entity.ProductId;
@@ -26,21 +27,18 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	ProductRepository productRepository;
-@Autowired
-TableIdFeignClient tableIdFeignClient;
-/*
 	@Autowired
-	RestTemplate restTemplate;
-
-	@Value("${api.uri.tableId-service}")
-	private String tableIdService;
-  */
+	TableIdFeignClient tableIdFeignClient;
+	/*
+	 * @Autowired RestTemplate restTemplate;
+	 * 
+	 * @Value("${api.uri.tableId-service}") private String tableIdService;
+	 */
 
 	@Autowired
 	RestTemplate restTemplate;
 	@Value("${api.tableId-service.uri}")
 	String tableIdService;
-
 
 	@Override
 	public Flux<Product> findAll() {
@@ -51,7 +49,7 @@ TableIdFeignClient tableIdFeignClient;
 	@Override
 	public Mono<Product> findById(Long idProducto) {
 		return productRepository.findById(idProducto)
-				.switchIfEmpty(Mono.just(new Product(Long.valueOf(-1), null, "", null, Long.valueOf(-1))));
+				.switchIfEmpty(Mono.just(new Product(Long.valueOf(-1), null, null, null, null, null, null)));
 
 	}
 
@@ -61,8 +59,9 @@ TableIdFeignClient tableIdFeignClient;
 		if (key >= 1) {
 			product.setIdProducto(key);
 			log.info("SAVE[product]:" + product.toString());
-		}else {
-			return Mono.error(new InterruptedException("Servicio no disponible:" + Product.class.getSimpleName()));		
+			product.setCreationDate(Calendar.getInstance().getTime());
+		} else {
+			return Mono.error(new InterruptedException("Servicio no disponible:" + Product.class.getSimpleName()));
 		}
 		return productRepository.insert(product);
 	}
@@ -94,20 +93,22 @@ TableIdFeignClient tableIdFeignClient;
 		return productRepository.findAll().count().flatMap(x -> {
 			log.info("Cantidad[X]:" + x);
 			List<Product> listaProducts = new ArrayList<Product>();
-			listaProducts.add(
-					new Product(Long.valueOf(1), ProductId.Ahorro, "Ahorro", TypeProduct.pasivos, Long.valueOf(1)));
-			listaProducts.add(new Product(Long.valueOf(2), ProductId.CuentaCorriente, "Cuenta corriente",
-					TypeProduct.pasivos, Long.valueOf(2)));
-			listaProducts.add(new Product(Long.valueOf(3), ProductId.PlazoFijo, "Plazo fijo", TypeProduct.pasivos,
-					Long.valueOf(3)));
-			listaProducts.add(
-					new Product(Long.valueOf(4), ProductId.Personal, "Personal", TypeProduct.activos, Long.valueOf(4)));
-			listaProducts.add(new Product(Long.valueOf(5), ProductId.Empresarial, "Empresarial", TypeProduct.activos,
-					Long.valueOf(5)));
-			listaProducts.add(new Product(Long.valueOf(6), ProductId.TarjetaCreditoEmpresarial, "Tarjeta de Credito",
-					TypeProduct.activos, Long.valueOf(6)));
-			listaProducts.add(new Product(Long.valueOf(7), ProductId.TarjetaCreditoPersonal,
-					"Tarjeta de Credito personal", TypeProduct.activos, Long.valueOf(7)));
+			// new Product(Long.valueOf(1), "Ahorro", TypeProduct.pasivos, Long.valueOf(1)),
+			// ProductId.Savings,null,null)
+			listaProducts.add(new Product(Long.valueOf(1), "Ahorro", TypeProduct.pasivos, Long.valueOf(1),
+					ProductId.Savings, null, null));
+			listaProducts.add(new Product(Long.valueOf(2), "Cuenta corriente", TypeProduct.pasivos, Long.valueOf(2),
+					ProductId.CurrentAccount, null, null));
+			listaProducts.add(new Product(Long.valueOf(3), "Plazo fijo", TypeProduct.pasivos, Long.valueOf(3),
+					ProductId.FixedTerm, null, null));
+			listaProducts.add(new Product(Long.valueOf(4), "Personal", TypeProduct.activos, Long.valueOf(4),
+					ProductId.Personnel, null, null));
+			listaProducts.add(new Product(Long.valueOf(5), "Empresarial", TypeProduct.activos, Long.valueOf(5),
+					ProductId.Business, null, null));
+			listaProducts.add(new Product(Long.valueOf(6), "Tarjeta de Credito", TypeProduct.activos, Long.valueOf(6),
+					ProductId.BusinessCreditCard, null, null));
+			listaProducts.add(new Product(Long.valueOf(7), "Tarjeta de Credito personal", TypeProduct.activos,
+					Long.valueOf(7), ProductId.PersonalCreditCard, null, null));
 			log.info("Fill data succefull");
 			idProducto = Long.valueOf(x);
 			return Flux.fromIterable(listaProducts).flatMap(product -> {
@@ -122,15 +123,13 @@ TableIdFeignClient tableIdFeignClient;
 	@Override
 	public Long generateKey(String nameTable) {
 		log.info(tableIdService + "/generateKey/" + nameTable);
-		/*ResponseEntity<Long> responseGet = restTemplate.exchange(tableIdService + "/generateKey/" + nameTable,
-				HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {
-				});
-		if (responseGet.getStatusCode() == HttpStatus.OK) {
-			log.info("Body:" + responseGet.getBody());
-			return responseGet.getBody();
-		} else {
-			return Long.valueOf(0);
-		}*/
+		/*
+		 * ResponseEntity<Long> responseGet = restTemplate.exchange(tableIdService +
+		 * "/generateKey/" + nameTable, HttpMethod.GET, null, new
+		 * ParameterizedTypeReference<Long>() { }); if (responseGet.getStatusCode() ==
+		 * HttpStatus.OK) { log.info("Body:" + responseGet.getBody()); return
+		 * responseGet.getBody(); } else { return Long.valueOf(0); }
+		 */
 		return tableIdFeignClient.generateKey(nameTable);
 	}
 }
