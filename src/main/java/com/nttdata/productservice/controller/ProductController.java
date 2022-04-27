@@ -81,7 +81,9 @@ public class ProductController {
 	@DeleteMapping(value="/{idProducto}",produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Mono<ResponseEntity<Void>> delete(@PathVariable(name = "idProducto") long idProducto) {
 		return productService.findById(idProducto).flatMap(producto -> {
-			return productService.delete(producto.getIdConfiguration()).then(Mono.just(ResponseEntity.ok().build()));
+			log.info("Produc:"+producto.toString());
+			productService.delete(producto.getIdProducto()).subscribe(log::info);
+			return Mono.just(ResponseEntity.ok().build());
 		});
 	}
 
