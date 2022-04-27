@@ -4,7 +4,7 @@ public enum TypeProduct {
 
  //cuentas bancarias
 	pasivos,
-	//créditos
+	//crï¿½ditos
 	activos;
 	
 }
