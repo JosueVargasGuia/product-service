@@ -15,6 +15,7 @@ import com.nttdata.productservice.FeignClient.TableIdFeignClient;
 import com.nttdata.productservice.entity.Product;
 import com.nttdata.productservice.entity.ProductId;
 import com.nttdata.productservice.entity.TypeProduct;
+import com.nttdata.productservice.model.ProductConfiguracion;
 import com.nttdata.productservice.repository.ProductRepository;
 import com.nttdata.productservice.service.ProductService;
 
