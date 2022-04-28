@@ -1,0 +1,56 @@
+[
+    {
+        "idProducto": 2,
+        "descriptionProducto": "Cuenta corriente",
+        "typeProduct": "pasivos",
+        "idConfiguration": 2,
+        "productId": "CurrentAccount",
+        "creationDate": "27/04/2022 18:16:53",
+        "dateModified": null
+    },
+    {
+        "idProducto": 3,
+        "descriptionProducto": "Plazo fijo",
+        "typeProduct": "pasivos",
+        "idConfiguration": 3,
+        "productId": "FixedTerm",
+        "creationDate": "27/04/2022 18:16:53",
+        "dateModified": null
+    },
+    {
+        "idProducto": 4,
+        "descriptionProducto": "Personal",
+        "typeProduct": "activos",
+        "idConfiguration": 4,
+        "productId": "Personnel",
+        "creationDate": "27/04/2022 18:16:53",
+        "dateModified": null
+    },
+    {
+        "idProducto": 5,
+        "descriptionProducto": "Empresarial",
+        "typeProduct": "activos",
+        "idConfiguration": 5,
+        "productId": "Business",
+        "creationDate": "27/04/2022 18:16:53",
+        "dateModified": null
+    },
+    {
+        "idProducto": 6,
+        "descriptionProducto": "Tarjeta de Credito",
+        "typeProduct": "activos",
+        "idConfiguration": 6,
+        "productId": "BusinessCreditCard",
+        "creationDate": "27/04/2022 18:16:53",
+        "dateModified": null
+    },
+    {
+        "idProducto": 7,
+        "descriptionProducto": "Tarjeta de Credito personal",
+        "typeProduct": "activos",
+        "idConfiguration": 7,
+        "productId": "PersonalCreditCard",
+        "creationDate": "27/04/2022 18:16:53",
+        "dateModified": null
+    }
+]
