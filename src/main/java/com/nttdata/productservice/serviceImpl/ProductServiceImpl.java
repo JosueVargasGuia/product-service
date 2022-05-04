@@ -2,20 +2,20 @@ package com.nttdata.productservice.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.nttdata.productservice.FeignClient.TableIdFeignClient;
 import com.nttdata.productservice.entity.Product;
 import com.nttdata.productservice.entity.ProductId;
 import com.nttdata.productservice.entity.TypeProduct;
-import com.nttdata.productservice.model.ProductConfiguracion;
 import com.nttdata.productservice.repository.ProductRepository;
 import com.nttdata.productservice.service.ProductService;
 
@@ -56,14 +56,21 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Mono<Product> save(Product product) {
-		Long key = generateKey(Product.class.getSimpleName());
-		if (key >= 1) {
-			product.setIdProducto(key);
-			log.info("SAVE[product]:" + product.toString());
-			product.setCreationDate(Calendar.getInstance().getTime());
+		Long count = this.findAll().collect(Collectors.counting()).blockOptional().get();
+		Long idProduct;
+		if (count != null) {
+			if (count <= 0) {
+				idProduct = Long.valueOf(0);
+			} else {
+				idProduct = this.findAll().collect(Collectors.maxBy(Comparator.comparing(Product::getIdProducto)))
+						.blockOptional().get().get().getIdProducto();
+			}
 		} else {
-			return Mono.error(new InterruptedException("Servicio no disponible:" + Product.class.getSimpleName()));
+			idProduct = Long.valueOf(0);
+
 		}
+		product.setIdProducto(idProduct+1);
+		product.setCreationDate(Calendar.getInstance().getTime());
 		return productRepository.insert(product);
 	}
 
