@@ -1,8 +1,8 @@
 *.class
 /target/*
-/src/target*
 /.settings/*
 /.classpath
+/log
 .factorypath
 .project
 .gitignore.bak
